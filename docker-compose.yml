@@ -1,0 +1,27 @@
+version: '3.5'
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    command:
+      - 'mongod'
+
+  api:
+    image: node:18
+    working_dir: /usr/src/app
+    environment:
+      - APP_PORT=80
+      - NODE_ENV=development
+    command: yarn run dev
+    volumes:
+      - ../:/usr/src/app
+    ports:
+      - 3001:80
+    depends_on:
+      - mongodb
+
+networks:
+  default:
+    external:
+      name: poc-csv-to-s3
